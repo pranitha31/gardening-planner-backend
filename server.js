@@ -27,8 +27,6 @@ import seasonalTaskRoutes from "./src/routes/seasonalTaskRoutes.js";
 import weatherPlannerRoutes from "./src/routes/weatherPlannerRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
 
-import pestRoutes from "./src/routes/pestRoutes.js";
-import journalRoutes from "./src/routes/journalRoutes.js";
 
 app.use("/api", testRoutes);
 app.use("/api/auth", authRoutes);
@@ -42,9 +40,6 @@ app.use("/api/seasonal-tasks", seasonalTaskRoutes);
 
 app.use("/api/weather-planner", weatherPlannerRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/pests", pestRoutes);
-app.use("/api/journal", journalRoutes);
-
 // Root route
 app.get("/", (req, res) => {
   res.send("Gardening Planner API running 🌱");
