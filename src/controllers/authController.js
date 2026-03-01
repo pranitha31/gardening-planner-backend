@@ -5,7 +5,6 @@ import { supabase } from "../config/supabaseClient.js";
 export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    //console.log("REGISTER API HIT FROM FRONTEND");
 
     // ✅ basic validation
     if (!name || !email || !password) {

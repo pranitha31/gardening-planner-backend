@@ -6,9 +6,17 @@ dotenv.config();
 
 // Create the Express app
 const app = express();
+const allowedOrigins = [
+  "http://localhost:5173",                      // Your "Work" address
+  "https://jade-alfajores-67b1cd.netlify.app"   // Your "Live" address
+];
 
-// Middleware
-app.use(cors());
+app.use(cors({
+  origin: allowedOrigins, 
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -44,13 +52,11 @@ app.use("/api/users", userRoutes);
 app.get("/", (req, res) => {
   res.send("Gardening Planner API running 🌱");
 });
-
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-app.get("/", (req, res) => {
-  res.send("Digital Time Capsule Backend is Running 🚀");
-});
+
+

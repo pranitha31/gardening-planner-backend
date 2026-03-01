@@ -66,16 +66,6 @@ export const getSmartPlanner = async (req, res) => {
       });
     // 3️⃣ Smart Gardening Advice
     let advice = "";
-
-    // if (temp > 35) {
-    //   advice = "High temperature. Increase watering frequency.";
-    // } else if (temp < 10) {
-    //   advice = "Cold weather. Protect plants from frost.";
-    // } else if (condition === "Rain") {
-    //   advice = "Rain expected. Reduce manual watering.";
-    // } else {
-    //   advice = "Weather is moderate. Normal care routine.";
-    // }
     if (temp <= 5) {
       advice = "⚠ Frost risk! Cover sensitive plants.";
     } else if (temp > 35) {
@@ -87,14 +77,6 @@ export const getSmartPlanner = async (req, res) => {
     } else {
       advice = "🌤 Good weather. Normal plant care routine.";
     }
-    // if (temp > 35) {
-    //   await supabase.from("reminders").insert({
-    //     user_id: req.user.id,
-    //     title: "Increase Watering 🌡️",
-    //     reminder_date: new Date().toISOString().split("T")[0],
-    //     status: "pending",
-    //   });
-    // }
     if (temp > 35) {
       const today = new Date().toISOString().split("T")[0];
 

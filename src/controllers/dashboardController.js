@@ -43,13 +43,6 @@ export const getDashboardStats = async (req, res) => {
       .eq("reminder_date", today)
       .eq("status", "pending");
 
-    // // Overdue reminders
-    // const { count: overdueCount } = await supabase
-    //   .from("reminders")
-    //   .select("*", { count: "exact", head: true })
-    //   .eq("user_id", userId)
-    //   .eq("status", "pending")
-    //   .lt("reminder_date", today);
 
     // Upcoming reminders
     const { data: upcomingReminders } = await supabase
@@ -77,7 +70,6 @@ export const getDashboardStats = async (req, res) => {
       seasonal_planner: seasonalPlannerCount || 0,
       seasonal_tasks: seasonalTaskCount || 0,
       today_reminders: todayReminders || [],
-      //overdue_reminders: overdueCount || 0,
       upcoming_reminders: upcomingReminders || [],
       locationMissing,
     });

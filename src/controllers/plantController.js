@@ -4,15 +4,13 @@ import { v4 as uuidv4 } from "uuid";
 // ✅ Create Plant with Image
 export const createPlant = async (req, res) => {
   try {
-    //console.log("BODY:", req.body);
-    //console.log("FILE:", req.file);
     const userId = req.user.id;
-
     const { plant_name, plant_type, sunlight, watering_interval_days } =
       req.body;
+
     let imageUrl = null;
 
-    // If image uploaded
+    // Upload image if exists
     if (req.file) {
       const fileName = `${userId}-${uuidv4()}`;
 
@@ -24,14 +22,15 @@ export const createPlant = async (req, res) => {
 
       if (uploadError) throw uploadError;
 
-      const { data } = supabase.storage
+      const { data: publicData } = supabase.storage
         .from("plant-images")
         .getPublicUrl(fileName);
 
-      imageUrl = data.publicUrl;
+      imageUrl = publicData.publicUrl;
     }
 
-    const { data, error } = await supabase
+    // Insert plant
+    const { data: plant, error } = await supabase
       .from("plants")
       .insert([
         {
@@ -39,7 +38,7 @@ export const createPlant = async (req, res) => {
           plant_name,
           plant_type,
           sunlight,
-          watering_interval_days: watering_interval_days || 3, // fallback default
+          watering_interval_days: watering_interval_days || 3,
           last_watered: new Date(),
           image_url: imageUrl,
         },
@@ -48,25 +47,26 @@ export const createPlant = async (req, res) => {
       .single();
 
     if (error) throw error;
-    // Auto-create watering reminder
+
+    // Create reminder
     const nextDate = new Date();
-    nextDate.setDate(nextDate.getDate() + Number(plant.watering_interval_days));
-    await supabase
-      .from("reminders")
-      .insert([
-        {
-          user_id: userId,
-          plant_id: plant.id,
-          reminder_type: "Watering",
-          reminder_date: nextDate,
-          status: "pending",
-        },
-      ]);
-    res.json({ plant });
+    nextDate.setDate(
+      nextDate.getDate() + Number(plant.watering_interval_days)
+    );
+
+    await supabase.from("reminders").insert([
+      {
+        user_id: userId,
+        plant_id: plant.id,
+        reminder_type: "Watering",
+        reminder_date: nextDate,
+        status: "pending",
+      },
+    ]);
 
     res.status(201).json({
       message: "Plant created successfully",
-      plant: data,
+      plant,
     });
   } catch (err) {
     res.status(500).json({

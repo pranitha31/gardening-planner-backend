@@ -7,9 +7,7 @@ export const createSeasonalPlant = async (req, res) => {
     const userId = req.user.id;
     const { plant_name, season, plant_type } = req.body;
     const care_tips = req.body.care_tips ? JSON.parse(req.body.care_tips) : [];
-    //console.log("BODY:", req.body);
-    //console.log("FILE:", req.file);
-
+   
     let imageUrl = null;
 
     // If image uploaded
